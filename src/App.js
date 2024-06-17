@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Login from "../src/Components/Login";
+import Register from "../src/Components/Register";
+import Home from "../src/Components/Home";
+import { CssBaseline, Typography, Box, Container } from "@mui/material";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+      <Container component="main" maxWidth="xs">
+        <Box mt={2}>
+          <Typography variant="body2" align="center">
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Login
+            </Link>{" "}
+            |{" "}
+            <Link
+              to="/register"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Register
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+    </Router>
   );
 }
 
