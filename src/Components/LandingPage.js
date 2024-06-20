@@ -85,6 +85,7 @@ const LandingPage = () => {
           </Box>
         </Container>
       </Box>
+      <a href="/">learn react</a>
     </>
   );
 };

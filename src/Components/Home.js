@@ -13,7 +13,11 @@ import {
   AppBar,
   Toolbar,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { searchMovies } from "../movieService";
+import { logout, isAuthenticated } from "../Backend";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MovieCard = ({ movie }) => (
   <Card
@@ -55,6 +59,15 @@ function Home(props) {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/login");
+    } else {
+      fetchMovies("popular");
+    }
+  }, []);
 
   const fetchMovies = async (query) => {
     setLoading(true);
@@ -62,10 +75,6 @@ function Home(props) {
     setMovies(result);
     setLoading(false);
   };
-
-  useEffect(() => {
-    fetchMovies("popular");
-  }, []);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -75,8 +84,11 @@ function Home(props) {
   };
 
   const handleLogout = () => {
-    // Implement logout logic here
-    console.log("Logout functionality will be added here");
+    logout();
+    toast.success("Logged out successfully!");
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
   };
 
   return (
@@ -90,8 +102,12 @@ function Home(props) {
       }}
     >
       <AppBar position="fixed" sx={{ backgroundColor: "#2196f3" }}>
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <div>
+        <Toolbar
+          sx={{
+            justifyContent: "space-between",
+          }}
+        >
+          <Box>
             <Typography
               component="h1"
               variant="h4"
@@ -105,7 +121,7 @@ function Home(props) {
             >
               Welcome to Movie Hub - Explore and Enjoy Movies
             </Typography>
-          </div>
+          </Box>
           <Button color="inherit" onClick={handleLogout}>
             Logout
           </Button>
@@ -122,12 +138,7 @@ function Home(props) {
               onChange={(e) => setQuery(e.target.value)}
               sx={{ width: "300px", mr: 2 }}
             />
-            <Button
-              sx={{ marginTop: "9px" }}
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
+            <Button variant="contained" color="primary" type="submit">
               Search
             </Button>
           </form>
@@ -146,10 +157,9 @@ function Home(props) {
           </Grid>
         )}
       </Container>
+      <ToastContainer />
     </Box>
   );
 }
 
-export default function HomeWithScrollTrigger(props) {
-  return <Home {...props} />;
-}
+export default Home;

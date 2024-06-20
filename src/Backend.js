@@ -1,4 +1,5 @@
 const USERS_KEY = "users";
+const CURRENT_USER_KEY = "current_user";
 
 const getUsers = () => {
   const users = localStorage.getItem(USERS_KEY);
@@ -17,5 +18,22 @@ export const register = (user) => {
 
 export const login = (email, password) => {
   const users = getUsers();
-  return users.find((u) => u.email === email && u.password === password);
+  const user = users.find((u) => u.email === email && u.password === password);
+  if (user) {
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  }
+  return user;
+};
+
+export const logout = () => {
+  localStorage.removeItem(CURRENT_USER_KEY);
+};
+
+export const isAuthenticated = () => {
+  return localStorage.getItem(CURRENT_USER_KEY) !== null;
+};
+
+export const getCurrentUser = () => {
+  const user = localStorage.getItem(CURRENT_USER_KEY);
+  return user ? JSON.parse(user) : null;
 };

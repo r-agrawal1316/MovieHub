@@ -9,8 +9,10 @@ import {
   AppBar,
   Toolbar,
 } from "@mui/material";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { login } from "../Backend";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -22,7 +24,10 @@ function Login() {
     event.preventDefault();
     const user = login(email, password);
     if (user) {
-      navigate("/home");
+      toast.success("Login successful!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
     } else {
       setError("Invalid email or password");
     }
@@ -34,13 +39,18 @@ function Login() {
         backgroundColor: "#f0f0f0",
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
       <AppBar position="fixed" sx={{ backgroundColor: "#2196f3" }}>
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <div>
+        <Toolbar
+          sx={{
+            justifyContent: "space-between",
+          }}
+        >
+          <Box>
             <Typography
               component="h1"
               variant="h4"
@@ -54,23 +64,25 @@ function Login() {
             >
               Welcome to Movie Hub - Explore and Enjoy Movies
             </Typography>
-          </div>
-          <Button color="inherit" component={Link} to="/register">
-            Register
-          </Button>
+          </Box>
         </Toolbar>
       </AppBar>
       <Toolbar />
       <Container component="main" maxWidth="xs">
         <Paper elevation={3} sx={{ padding: 4, backgroundColor: "#fff8e1" }}>
-          <Typography component="h1" variant="h4" align="center" gutterBottom>
+          <Typography
+            component="h1"
+            variant="h4"
+            textAlign="center"
+            gutterBottom
+          >
             MovieHub
           </Typography>
-          <Typography variant="h5" align="center" gutterBottom>
-            Welcome Back !!!
+          <Typography component="h1" variant="h5" textAlign="center">
+            Login
           </Typography>
           {error && (
-            <Typography color="error" align="center" gutterBottom>
+            <Typography color="error" align="center">
               {error}
             </Typography>
           )}
@@ -110,17 +122,8 @@ function Login() {
             </Button>
           </Box>
         </Paper>
-        <Box mt={2}>
-          <Typography variant="body2" align="center">
-            <Link
-              to="/register"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Don't have an account? Register here.
-            </Link>
-          </Typography>
-        </Box>
       </Container>
+      <ToastContainer />
     </Box>
   );
 }
